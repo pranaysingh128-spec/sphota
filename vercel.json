@@ -1,0 +1,111 @@
+{
+  "installCommand": "npm install --legacy-peer-deps",
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "functions": {
+    "api/ai/chat.ts": {
+      "maxDuration": 60
+    },
+    "api/ai/transcribe.ts": {
+      "maxDuration": 60
+    },
+    "api/ai/scan.ts": {
+      "maxDuration": 60
+    },
+    "api/razorpay/[action].ts": {
+      "maxDuration": 10
+    },
+    "api/report-review.ts": {
+      "maxDuration": 10
+    },
+    "api/account.ts": {
+      "maxDuration": 15
+    },
+    "api/command-log/[action].ts": {
+      "maxDuration": 30
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/api/consent",
+      "destination": "/api/account?action=consent"
+    },
+    {
+      "source": "/api/consent/:path*",
+      "destination": "/api/account?action=consent"
+    },
+    {
+      "source": "/api/delete-account",
+      "destination": "/api/account?action=delete-account"
+    },
+    {
+      "source": "/api/razorpay/create-order",
+      "destination": "/api/razorpay/[action]?action=create-order"
+    },
+    {
+      "source": "/api/razorpay/verify",
+      "destination": "/api/razorpay/[action]?action=verify"
+    },
+    {
+      "source": "/api/ai/transcribe-health",
+      "destination": "/api/ai/transcribe"
+    },
+    {
+      "source": "/api/receptionist/appointments",
+      "destination": "/api/receptionist/appointments/_"
+    },
+    {
+      "source": "/api/receptionist/appointments/:id",
+      "destination": "/api/receptionist/appointments/:id"
+    },
+    {
+      "source": "/api/receptionist/patients",
+      "destination": "/api/receptionist/patients/_"
+    },
+    {
+      "source": "/api/receptionist/patients/:id",
+      "destination": "/api/receptionist/patients/:id"
+    },
+    {
+      "source": "/api/receptionist/patients/:id/status",
+      "destination": "/api/receptionist/patients/:id"
+    },
+    {
+      "source": "/api/receptionist/patients/:id/details",
+      "destination": "/api/receptionist/patients/:id"
+    },
+    {
+      "source": "/((?!api/).*)",
+      "destination": "/index.html"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "X-Frame-Options", "value": "DENY" },
+        { "key": "X-XSS-Protection", "value": "1; mode=block" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
+        { "key": "Permissions-Policy", "value": "camera=(), microphone=(self), geolocation=()" },
+        { "key": "Strict-Transport-Security", "value": "max-age=31536000; includeSubDomains" },
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' https://checkout.razorpay.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https://*.razorpay.com; connect-src 'self' https://*.supabase.co wss://*.supabase.co https://generativelanguage.googleapis.com https://api.groq.com https://api.openai.com https://api.anthropic.com https://api.razorpay.com https://oauth2.googleapis.com https://gmail.googleapis.com; media-src 'self' blob:; worker-src 'self' blob:; object-src 'none'; frame-src https://api.razorpay.com https://*.razorpay.com https://accounts.google.com; frame-ancestors 'none';"
+        }
+      ]
+    },
+    {
+      "source": "/assets/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
+    },
+    {
+      "source": "/favicon.svg",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=86400" }
+      ]
+    }
+  ]
+}
